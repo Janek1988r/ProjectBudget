@@ -16,10 +16,60 @@
   <body>
     <section>
       <div class="logo"></div>
-      <div>Tutaj pojawi się stan Twoich finansów</div>
+      <div id="sum-of-all">Tutaj pojawi się stan Twoich finansów</div>
       <div class="table">
-        <div><h2>Przychody</h2></div>
-        <div><h2>Wydatki</h2></div>
+        <div>
+          <!--
+            Tabela przychodów
+          -->
+          <h2>Przychody</h2>
+          <div id="incomes-container">
+            <form id="incomes-form">
+              <input
+                id="incomes-name"
+                type="text"
+                placeholder="Nazwa wpływów"
+              />
+              <input
+                id="incomes-value"
+                type="num"
+                placeholder="Wartość wpływów"
+              />
+              <button id="form-in-submit" class="button" type="submit">
+                Dodaj wpływy
+              </button>
+            </form>
+          </div>
+          <div id="income-table" class="tables">
+            <div id="income-list">coś</div>
+            <h2>Suma przychodów:</h2>
+            <span id="sum-of-incomes"></span>
+          </div>
+        </div>
+        <!--
+            Tabela wydatków
+          -->
+        <div>
+          <h2>Wydatki</h2>
+          <div id="outgoes-container">
+            <form id="outgoes-form">
+              <input id="outgo-name" type="text" placeholder="Nazwa wydatku" />
+              <input
+                id="outgoes-value"
+                type="num"
+                placeholder="Wartość wydatków"
+              />
+              <button id="form-out-submit" class="button" type="submit">
+                Dodaj wydatki
+              </button>
+            </form>
+          </div>
+          <div id="outgo-table" class="tables">
+            <div id="outgo-list">coś</div>
+            <h2>Suma wydatków:</h2>
+            <span id="sum-of-outgoes"></span>
+          </div>
+        </div>
       </div>
     </section>
     <script src="index.js"></script>
