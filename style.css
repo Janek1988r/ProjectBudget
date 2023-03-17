@@ -60,10 +60,12 @@ section > div {
 input[type="text"] {
   border-radius: 5px;
   border: 2px solid rgb(0, 0, 0);
+  width: 35%;
 }
 input[type="num"] {
   border-radius: 5px;
   border: 2px solid rgb(0, 0, 0);
+  width: 20%;
 }
 .tables {
   display: flex;
@@ -77,4 +79,7 @@ input[type="num"] {
 }
 .button:active {
   scale: 0.95;
+}
+.green {
+  color: rgb(7, 192, 7);
 }
