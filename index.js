@@ -27,6 +27,7 @@ const outgoEditColumn = document.querySelector("#inc-edit-col");
 const outgoRemoveColumn = document.querySelector("#inc-remove-col");
 
 let incomes = [];
+
 const incomeID = Date.now();
 
 const renderIncome = (income) => {
@@ -37,7 +38,7 @@ const renderIncome = (income) => {
   incomeTitle.innerHTML = `${income.title}: `;
 
   const incomeValue = document.createElement("span");
-  incomeValue.innerHTML = `${income.value} złotych`;
+  incomeValue.innerHTML = `${income.iValue} złotych`;
 
   newIncome.appendChild(incomeTitle);
   newIncome.appendChild(incomeValue);
@@ -51,14 +52,32 @@ const addIncome = (e) => {
   const income = {
     id: incomeID,
     title: incName,
-    value: incVal,
+    iValue: incVal,
   };
   incomes.push(income);
   incomeName.value = "";
   incomeValue.value = "";
   renderIncome(income);
+  let incomeValueTable = incomes.map(({ iValue }) => iValue);
+  console.log(incomeValueTable);
+  /*let sumOfIncomes = incomes.reduce(
+    (accumulator, currentValue) => accumulator + currentValue.iValue,
+    0
+  );*/
+  let sumOfIncomes = incomeValueTable.reduce(
+    (accumulator, currentValue) => accumulator + currentValue,
+    0
+  );
+  console.log(sumOfIncomes);
+  console.log(typeof incomes.iValue);
 };
 
 incomesSubmit.addEventListener("submit", addIncome);
+
+let sumOfIncomes = incomes.reduce((accumulator, object) => {
+  return accumulator + object.iValue;
+}, 0);
+
+incomesSum.innerHTML = `${sumOfIncomes}`;
 
 console.log(incomes);
