@@ -1,53 +1,78 @@
 const incomeName = document.querySelector("#incomes-name");
-const incomeValue = document.querySelector("#incomes-value");
-
-const incomesSubmit = document.querySelector("#incomes-form");
-
 const outgoName = document.querySelector("#outgoes-name");
+
+const incomeValue = document.querySelector("#incomes-value");
 const outgoValue = document.querySelector("#outgoes-value");
 
+const incomesSubmit = document.querySelector("#incomes-form");
+const outgoesSubmit = document.querySelector("#outgoes-form");
+
 const btnIncomeSubmit = document.querySelector("#form-in-submit");
-const btnOutgoeSubmit = document.querySelector("#form-out-submit");
+const btnOutgoSubmit = document.querySelector("#form-out-submit");
 
 const incomesSum = document.querySelector("#sum-of-incomes");
 const outgoesSum = document.querySelector("#sum-of-outgoes");
+
 let sumOfMoney = document.querySelector("#sum-of-all");
 
 const incomesList = document.querySelector("#income-list");
-const outgoesList = document.querySelector("#outgoe-list");
-
-const incomeNameColumn = document.querySelector("#inc-name-col");
-const incomeValueColumn = document.querySelector("#inc-value-col");
-const incomeEditColumn = document.querySelector("#inc-edit-col");
-const incomeRemoveColumn = document.querySelector("#inc-remove-col");
-
-const outgoNameColumn = document.querySelector("#inc-name-col");
-const outgoValueColumn = document.querySelector("#inc-value-col");
-const outgoEditColumn = document.querySelector("#inc-edit-col");
-const outgoRemoveColumn = document.querySelector("#inc-remove-col");
+const outgoesList = document.querySelector("#outgo-list");
 
 let incomes = [];
+let outgoes = [];
+let sumOfIncomes = 0;
+let sumOfOutgoes = 0;
+
+/*INCOMES*/
 
 const removeIncome = (e) => {
   const incomeElement = e.currentTarget;
-  const incomeElementParten = incomeElement.closest("div");
+  const incomeElementParten = incomeElement.closest(".budget-element");
   incomeElementParten.remove();
 
   const removedId = incomeElementParten.id;
   console.log(removedId);
-  /* incomes = incomes.filter((item) => item.id !== removedId);*/
-  incomes = incomes.filter((v) => !removedId.includes(v));
-  /*let removeIncomeByID = () => {
-    let incomes = incomes.findIndex((obj) => obj.id === removedId);
-    if (incomes > -1) {
-      incomes.splice(incomes, 1);
-    }
-    return incomes;
-  };*/
+  incomes = incomes.filter((item) => item.id != removedId);
 
   let sumOfIncomes = calculateSum(incomes, "iValue");
   incomesSum.innerHTML = `Suma przychodów: ${sumOfIncomes} PLN`;
-  console.log(incomes);
+};
+
+const editPosition = (e) => {
+  const element = e.currentTarget;
+  const elementParten = element.closest(".budget-element");
+
+  const divForEdit = document.createElement("div");
+  divForEdit.classList.add("editing");
+
+  const formForEdit = document.createElement("form");
+  formForEdit.setAttribute = ("id", "form-for-edit");
+
+  const editedName = document.createElement("input");
+  editedName.setAttribute("id", "edited-name");
+  editedName.setAttribute("type", "text");
+  editedName.setAttribute("placeholder", "Nowa Nazwa");
+
+  const editedValue = document.createElement("input");
+  editedValue.setAttribute("id", "edited-value");
+  editedValue.setAttribute("type", "number");
+  editedValue.setAttribute("ster", "0.01");
+  editedValue.setAttribute("placeholder", "Nowa Nazwa");
+
+  const editedButton = document.createElement("button");
+  editedButton.innerHTML = "Zmień";
+  editedButton.setAttribute("id", "form-edit-button");
+  editedButton.setAttribute("type", "submit");
+  editedButton.classList.add("button");
+
+  formForEdit.appendChild(editedName);
+  formForEdit.appendChild(editedValue);
+  formForEdit.appendChild(editedButton);
+  divForEdit.appendChild(formForEdit);
+  elementParten.appendChild(divForEdit);
+
+  let sumOfIncomes = calculateSum(incomes, "iValue");
+  incomesSum.innerHTML = `Suma przychodów: ${sumOfIncomes} PLN`;
 };
 
 const renderIncome = (income) => {
@@ -63,8 +88,15 @@ const renderIncome = (income) => {
   buttonRemove.innerText = "Usuń";
   buttonRemove.classList.add("button");
 
+  const budgetElement = document.createElement("div");
+  budgetElement.classList.add("budget-element");
+  budgetElement.id = `${income.id}`;
+
   const newIncome = document.createElement("div");
-  newIncome.id = `${income.id}`;
+  newIncome.classList.add("budget-position");
+
+  const newIncomeButtons = document.createElement("div");
+  newIncomeButtons.classList.add("budget-buttons");
 
   const incomeTitle = document.createElement("span");
   incomeTitle.innerHTML = `${income.title}: `;
@@ -74,11 +106,14 @@ const renderIncome = (income) => {
 
   newIncome.appendChild(incomeTitle);
   newIncome.appendChild(incomeValue);
-  newIncome.appendChild(buttonEdit);
-  newIncome.appendChild(buttonRemove);
-  incomesList.appendChild(newIncome);
+  newIncomeButtons.appendChild(buttonEdit);
+  newIncomeButtons.appendChild(buttonRemove);
+  budgetElement.appendChild(newIncome);
+  budgetElement.appendChild(newIncomeButtons);
+  incomesList.appendChild(budgetElement);
 
   buttonRemove.addEventListener("click", removeIncome);
+  buttonEdit.addEventListener("click", editPosition);
 };
 
 const addIncome = (e) => {
@@ -104,11 +139,80 @@ const addIncome = (e) => {
     renderIncome(income);
     let sumOfIncomes = calculateSum(incomes, "iValue");
     incomesSum.innerHTML = `Suma przychodów: ${sumOfIncomes} PLN`;
-    console.log(incomes);
+    console.log("Przychody", sumOfIncomes);
   }
 };
 
-incomesSubmit.addEventListener("submit", addIncome);
+/*OUTGOES*/
+const removeOutgo = (e) => {
+  const outgoElement = e.currentTarget;
+  const outgoElementParten = outgoElement.closest("div");
+  outgoElementParten.remove();
+
+  const removedId = outgoElementParten.id;
+  console.log(removedId);
+  outgoes = outgoes.filter((item) => item.id != removedId);
+
+  let sumOfOutgoes = calculateSum(outgoes, "oValue");
+  outgoesSum.innerHTML = `Suma wydatków: ${sumOfOutgoes} PLN`;
+};
+
+const renderOutgo = (outgo) => {
+  const buttonEdit = document.createElement("button");
+  buttonEdit.type = "button";
+  buttonEdit.name = "buttonEdit";
+  buttonEdit.innerText = "Edytuj";
+  buttonEdit.classList.add("button");
+
+  const buttonRemove = document.createElement("button");
+  buttonRemove.type = "submit";
+  buttonRemove.name = "buttonRemove";
+  buttonRemove.innerText = "Usuń";
+  buttonRemove.classList.add("button");
+
+  const newOutgo = document.createElement("div");
+  newOutgo.id = `${outgo.id}`;
+
+  const outgoTitle = document.createElement("span");
+  outgoTitle.innerHTML = `${outgo.title}: `;
+
+  const outgoValue = document.createElement("span");
+  outgoValue.innerHTML = `${outgo.oValue} złotych`;
+
+  newOutgo.appendChild(outgoTitle);
+  newOutgo.appendChild(outgoValue);
+  newOutgo.appendChild(buttonEdit);
+  newOutgo.appendChild(buttonRemove);
+  outgoesList.appendChild(newOutgo);
+
+  buttonRemove.addEventListener("click", removeOutgo);
+};
+
+const addOutgo = (e) => {
+  e.preventDefault();
+  if (outgoName.value == "" || outgoValue.value == "") {
+    alert("Wprowadź poprawne dane!");
+    return;
+  } else {
+    const outgoID = Date.now();
+    const outVal = outgoValue.value;
+    const outName = outgoName.value;
+
+    const outgo = {
+      id: outgoID,
+      title: outName,
+      oValue: parseFloat(outVal),
+    };
+
+    outgoes.push(outgo);
+    outgoName.value = "";
+    outgoValue.value = "";
+
+    renderOutgo(outgo);
+    let sumOfOutgoes = calculateSum(outgoes, "oValue");
+    outgoesSum.innerHTML = `Suma wydatków: ${sumOfOutgoes} PLN`;
+  }
+};
 
 function calculateSum(array, property) {
   const total = array.reduce((accumulator, object) => {
@@ -116,3 +220,29 @@ function calculateSum(array, property) {
   }, 0);
   return total;
 }
+
+function calculateTotalMoney() {
+  const totalIncome = incomes.reduce((accumulator, object) => {
+    return accumulator + object.iValue;
+  }, 0);
+  const totalOutgo = outgoes.reduce((accumulator, object) => {
+    return accumulator + object.oValue;
+  }, 0);
+  const totalMoney = totalIncome - totalOutgo;
+  console.log(totalMoney);
+  sumOfMoney.innerHTML = `Stan Twojego konta wynosi ${totalMoney} PLN`;
+  return totalMoney;
+}
+
+incomesSubmit.addEventListener("submit", addIncome);
+outgoesSubmit.addEventListener("submit", addOutgo);
+
+document.addEventListener("click", calculateTotalMoney);
+document.addEventListener("submit", calculateTotalMoney);
+
+/*    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+      crossorigin="anonymous"
+    />*/

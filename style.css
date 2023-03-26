@@ -10,7 +10,7 @@ section {
 }
 h2 {
   font-weight: 700;
-  margin: 20px 0;
+  margin: 10px 0px;
 }
 section > div {
   margin-bottom: 20px;
@@ -51,9 +51,9 @@ section > div {
 }
 .button {
   border-radius: 5px;
-  border: 2px solid rgb(0, 0, 0);
+  border: 1px solid rgb(0, 0, 0);
   background-color: rgb(228, 222, 222);
-  font-weight: 700;
+  font-weight: 600;
   transition-duration: 0.02s;
   transition-property: all;
 }
@@ -75,11 +75,34 @@ input[type="num"] {
   margin: 20px 0;
 }
 .button:hover {
-  border-width: 3px;
+  border-width: 2px;
 }
 .button:active {
   scale: 0.95;
 }
 .green {
   color: rgb(7, 192, 7);
+}
+
+.budget-element {
+  color: black;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  border-style: solid;
+  border-color: black;
+  border-width: 1px;
+}
+
+.budget-position {
+  align-items: center;
+}
+
+.budget-buttons {
+  display: flex;
+}
+
+.lists {
+  margin-bottom: 20px;
 }
