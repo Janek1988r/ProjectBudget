@@ -38,7 +38,9 @@ const removeIncome = (e) => {
   incomesSum.innerHTML = `Suma przychodów: ${sumOfIncomes} PLN`;
 };
 
-const editPosition = (e) => {
+const getEditedValues = () => {};
+
+const editListPosition = (e) => {
   const element = e.currentTarget;
   const elementParten = element.closest(".budget-element");
 
@@ -65,11 +67,23 @@ const editPosition = (e) => {
   editedButton.setAttribute("type", "submit");
   editedButton.classList.add("button");
 
+  const cancelButton = document.createElement("button");
+  cancelButton.innerHTML = "Anuluj";
+  cancelButton.setAttribute("id", "cancel-button");
+  cancelButton.setAttribute("type", "button");
+  cancelButton.classList.add("button");
+
   formForEdit.appendChild(editedName);
   formForEdit.appendChild(editedValue);
   formForEdit.appendChild(editedButton);
+  formForEdit.appendChild(cancelButton);
   divForEdit.appendChild(formForEdit);
   elementParten.appendChild(divForEdit);
+
+  cancelButton.addEventListener("click", () => {
+    const canceledList = cancelButton.closest(".editing");
+    canceledList.remove();
+  });
 
   let sumOfIncomes = calculateSum(incomes, "iValue");
   incomesSum.innerHTML = `Suma przychodów: ${sumOfIncomes} PLN`;
@@ -113,7 +127,7 @@ const renderIncome = (income) => {
   incomesList.appendChild(budgetElement);
 
   buttonRemove.addEventListener("click", removeIncome);
-  buttonEdit.addEventListener("click", editPosition);
+  buttonEdit.addEventListener("click", editListPosition);
 };
 
 const addIncome = (e) => {
