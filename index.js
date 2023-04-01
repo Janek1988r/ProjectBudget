@@ -38,9 +38,27 @@ const removeIncome = (e) => {
   incomesSum.innerHTML = `Suma przychodów: ${sumOfIncomes} PLN`;
 };
 
-const getEditedValues = () => {};
+const getEditedValues = () => {
+  const getEditedName = document.querySelector("#edited-name");
+  const getEditedValue = document.querySelector("#edited-value");
+  const getEditedId = editedButton.closest(".budget-element");
 
-const editListPosition = (e) => {
+  const editedId = getEditedId.id;
+  const editedName = getEditedName.value;
+  const editedValue = getEditedValue.value;
+
+  console.log(editedName);
+  console.log(editedValue);
+  console.log(editedId);
+};
+
+/*{
+  const index = array.findIndex((item) => item.id === szukaneId);
+  array[index].amount = 123;
+}*/
+
+const createEditForm = (e) => {
+  e.preventDefault();
   const element = e.currentTarget;
   const elementParten = element.closest(".budget-element");
 
@@ -59,7 +77,7 @@ const editListPosition = (e) => {
   editedValue.setAttribute("id", "edited-value");
   editedValue.setAttribute("type", "number");
   editedValue.setAttribute("ster", "0.01");
-  editedValue.setAttribute("placeholder", "Nowa Nazwa");
+  editedValue.setAttribute("placeholder", "Nowa kwota");
 
   const editedButton = document.createElement("button");
   editedButton.innerHTML = "Zmień";
@@ -83,6 +101,10 @@ const editListPosition = (e) => {
   cancelButton.addEventListener("click", () => {
     const canceledList = cancelButton.closest(".editing");
     canceledList.remove();
+  });
+
+  editedButton.addEventListener("click", function (event) {
+    getEditedValues, event.preventDefault();
   });
 
   let sumOfIncomes = calculateSum(incomes, "iValue");
@@ -127,7 +149,7 @@ const renderIncome = (income) => {
   incomesList.appendChild(budgetElement);
 
   buttonRemove.addEventListener("click", removeIncome);
-  buttonEdit.addEventListener("click", editListPosition);
+  buttonEdit.addEventListener("click", createEditForm);
 };
 
 const addIncome = (e) => {
@@ -253,10 +275,3 @@ outgoesSubmit.addEventListener("submit", addOutgo);
 
 document.addEventListener("click", calculateTotalMoney);
 document.addEventListener("submit", calculateTotalMoney);
-
-/*    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
-      crossorigin="anonymous"
-    />*/
