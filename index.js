@@ -370,12 +370,18 @@ function calculateTotalMoney() {
   }, 0);
   const totalMoney = totalIncome - totalOutgo;
   console.log(totalMoney);
-  sumOfMoney.innerHTML = `Stan Twojego konta wynosi ${totalMoney} PLN`;
+  const absoluteTotalMoney = Math.abs(totalMoney);
+  sumOfMoney.innerHTML = `Bilans wynosi zero`;
   if (totalMoney > 0) {
     sumOfMoney.classList.add("green");
     sumOfMoney.classList.remove("red");
-  } else {
+    sumOfMoney.innerHTML = `Możesz jeszcze wydac ${totalMoney} PLN`;
+  } else if (totalMoney < 0) {
     sumOfMoney.classList.add("red");
+    sumOfMoney.classList.remove("green");
+    sumOfMoney.innerHTML = `Bilans jest ujemny. Jesteś na minusie ${absoluteTotalMoney} PLN`;
+  } else {
+    sumOfMoney.classList.remove("red");
     sumOfMoney.classList.remove("green");
   }
   return totalMoney;
