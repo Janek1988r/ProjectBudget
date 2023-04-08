@@ -80,11 +80,10 @@ input[type="num"] {
 .button:active {
   scale: 0.95;
 }
-.green {
-  color: rgb(7, 192, 7);
-}
 
 .budget-element {
+  padding: 2px;
+  margin-top: 3px;
   color: black;
   display: flex;
   justify-content: space-between;
@@ -92,10 +91,12 @@ input[type="num"] {
   flex-wrap: wrap;
   border-style: solid;
   border-color: black;
-  border-width: 1px;
+  border-width: 2px;
 }
 
 .budget-position {
+  margin-bottom: 3px;
+  padding: 3px;
   align-items: center;
 }
 
@@ -105,4 +106,18 @@ input[type="num"] {
 
 .lists {
   margin-bottom: 20px;
+}
+
+#incomes-container {
+  padding: 10px 5px;
+  border-style: solid;
+  border-width: 2px;
+  background-color: rgb(165, 241, 165);
+}
+
+#outgoes-container {
+  padding: 10px 5px;
+  border-style: solid;
+  border-width: 2px;
+  background-color: rgb(255, 60, 60);
 }

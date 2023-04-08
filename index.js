@@ -22,6 +22,7 @@ let incomes = [];
 let outgoes = [];
 let sumOfIncomes = 0;
 let sumOfOutgoes = 0;
+let isEdited = false;
 
 /*INCOMES*/
 
@@ -38,7 +39,43 @@ const removeIncome = (e) => {
   incomesSum.innerHTML = `Suma przychodów: ${sumOfIncomes} PLN`;
 };
 
-const getEditedValues = () => {
+const changeInputValues = (editedID, editedName, editedValue, event) => {
+  const divById = document.getElementById(editedID);
+  const elementsToUpdate = divById.querySelectorAll(".budget-position span");
+  let index = incomes.findIndex((item) => item.id == editedID);
+  console.log("index", index);
+  if (index != -1) {
+    if (editedName != "") {
+      elementsToUpdate[0].innerHTML = `${editedName}: `;
+      incomes[index].title = editedName;
+    }
+    if (editedValue != "") {
+      elementsToUpdate[1].innerHTML = `${editedValue} PLN`;
+      incomes[index].iValue = parseFloat(editedValue);
+    }
+    let sumOfIncomes = calculateSum(incomes, "iValue");
+    incomesSum.innerHTML = `Suma przychodów: ${sumOfIncomes} złotych`;
+    console.log("Przychody", sumOfIncomes);
+  } else {
+    index = outgoes.findIndex((item) => item.id == editedID);
+    if (editedName != "") {
+      elementsToUpdate[0].innerHTML = `${editedName}: `;
+      outgoes[index].title = `${editedName} złotych`;
+    }
+    if (editedValue != "") {
+      elementsToUpdate[1].innerHTML = editedValue;
+      outgoes[index].oValue = parseFloat(editedValue);
+    }
+    let sumOfOutgoes = calculateSum(outgoes, "oValue");
+    outgoesSum.innerHTML = `Suma przychodów: ${sumOfOutgoes} PLN`;
+    console.log("Wydatki", sumOfOutgoes);
+  }
+  const toRemove = event.currentTarget;
+  const toRemoveParent = toRemove.closest(".editing");
+  toRemoveParent.remove();
+};
+
+const getEditedValues = (editedButton) => {
   const getEditedName = document.querySelector("#edited-name");
   const getEditedValue = document.querySelector("#edited-value");
   const getEditedId = editedButton.closest(".budget-element");
@@ -47,17 +84,10 @@ const getEditedValues = () => {
   const editedName = getEditedName.value;
   const editedValue = getEditedValue.value;
 
-  console.log(editedName);
-  console.log(editedValue);
-  console.log(editedId);
+  changeInputValues(editedId, editedName, editedValue, event);
 };
 
-/*{
-  const index = array.findIndex((item) => item.id === szukaneId);
-  array[index].amount = 123;
-}*/
-
-const createEditForm = (e) => {
+const createIncomeEditForm = (e) => {
   e.preventDefault();
   const element = e.currentTarget;
   const elementParten = element.closest(".budget-element");
@@ -91,24 +121,88 @@ const createEditForm = (e) => {
   cancelButton.setAttribute("type", "button");
   cancelButton.classList.add("button");
 
-  formForEdit.appendChild(editedName);
-  formForEdit.appendChild(editedValue);
-  formForEdit.appendChild(editedButton);
-  formForEdit.appendChild(cancelButton);
-  divForEdit.appendChild(formForEdit);
-  elementParten.appendChild(divForEdit);
+  if (isEdited == false) {
+    formForEdit.appendChild(editedName);
+    formForEdit.appendChild(editedValue);
+    formForEdit.appendChild(editedButton);
+    formForEdit.appendChild(cancelButton);
+    divForEdit.appendChild(formForEdit);
+    elementParten.appendChild(divForEdit);
 
-  cancelButton.addEventListener("click", () => {
-    const canceledList = cancelButton.closest(".editing");
-    canceledList.remove();
-  });
+    cancelButton.addEventListener("click", () => {
+      const canceledList = cancelButton.closest(".editing");
+      canceledList.remove();
+      isEdited = false;
+    });
 
-  editedButton.addEventListener("click", function (event) {
-    getEditedValues, event.preventDefault();
-  });
-
+    editedButton.addEventListener("click", function (event) {
+      event.preventDefault();
+      getEditedValues(editedButton);
+      isEdited = false;
+    });
+  }
   let sumOfIncomes = calculateSum(incomes, "iValue");
   incomesSum.innerHTML = `Suma przychodów: ${sumOfIncomes} PLN`;
+  isEdited = true;
+};
+
+const createOutgoEditForm = (eve) => {
+  eve.preventDefault();
+  const element = eve.currentTarget;
+  const elementParten = element.closest(".budget-element");
+
+  const divForOutgoEdit = document.createElement("div");
+  divForOutgoEdit.classList.add("editing");
+
+  const formForEdit = document.createElement("form");
+  formForEdit.setAttribute = ("id", "form-for-edit");
+
+  const editedName = document.createElement("input");
+  editedName.setAttribute("id", "edited-name");
+  editedName.setAttribute("type", "text");
+  editedName.setAttribute("placeholder", "Nowa Nazwa");
+
+  const editedValue = document.createElement("input");
+  editedValue.setAttribute("id", "edited-value");
+  editedValue.setAttribute("type", "number");
+  editedValue.setAttribute("ster", "0.01");
+  editedValue.setAttribute("placeholder", "Nowa kwota");
+
+  const editedButton = document.createElement("button");
+  editedButton.innerHTML = "Zmień";
+  editedButton.setAttribute("id", "form-edit-button");
+  editedButton.setAttribute("type", "submit");
+  editedButton.classList.add("button");
+
+  const cancelButton = document.createElement("button");
+  cancelButton.innerHTML = "Anuluj";
+  cancelButton.setAttribute("id", "cancel-button");
+  cancelButton.setAttribute("type", "button");
+  cancelButton.classList.add("button");
+
+  if (isEdited == false) {
+    formForEdit.appendChild(editedName);
+    formForEdit.appendChild(editedValue);
+    formForEdit.appendChild(editedButton);
+    formForEdit.appendChild(cancelButton);
+    divForOutgoEdit.appendChild(formForEdit);
+    elementParten.appendChild(divForOutgoEdit);
+
+    cancelButton.addEventListener("click", () => {
+      const canceledList = cancelButton.closest(".editing");
+      canceledList.remove();
+      isEdited = false;
+    });
+
+    editedButton.addEventListener("click", function (event) {
+      event.preventDefault();
+      getEditedValues(editedButton);
+      isEdited = false;
+    });
+  }
+  let sumOfOutgoes = calculateSum(outgoes, "oValue");
+  outgoesSum.innerHTML = `Suma wydatków: ${sumOfOutgoes} PLN`;
+  isEdited = true;
 };
 
 const renderIncome = (income) => {
@@ -149,7 +243,7 @@ const renderIncome = (income) => {
   incomesList.appendChild(budgetElement);
 
   buttonRemove.addEventListener("click", removeIncome);
-  buttonEdit.addEventListener("click", createEditForm);
+  buttonEdit.addEventListener("click", createIncomeEditForm);
 };
 
 const addIncome = (e) => {
@@ -182,7 +276,7 @@ const addIncome = (e) => {
 /*OUTGOES*/
 const removeOutgo = (e) => {
   const outgoElement = e.currentTarget;
-  const outgoElementParten = outgoElement.closest("div");
+  const outgoElementParten = outgoElement.closest(".budget-element");
   outgoElementParten.remove();
 
   const removedId = outgoElementParten.id;
@@ -206,8 +300,15 @@ const renderOutgo = (outgo) => {
   buttonRemove.innerText = "Usuń";
   buttonRemove.classList.add("button");
 
+  const outgoElement = document.createElement("div");
+  outgoElement.classList.add("budget-element");
+  outgoElement.id = `${outgo.id}`;
+
   const newOutgo = document.createElement("div");
-  newOutgo.id = `${outgo.id}`;
+  newOutgo.classList.add("budget-position");
+
+  const newOutgoButtons = document.createElement("div");
+  newOutgoButtons.classList.add("budget-buttons");
 
   const outgoTitle = document.createElement("span");
   outgoTitle.innerHTML = `${outgo.title}: `;
@@ -217,11 +318,14 @@ const renderOutgo = (outgo) => {
 
   newOutgo.appendChild(outgoTitle);
   newOutgo.appendChild(outgoValue);
-  newOutgo.appendChild(buttonEdit);
-  newOutgo.appendChild(buttonRemove);
-  outgoesList.appendChild(newOutgo);
+  newOutgoButtons.appendChild(buttonEdit);
+  newOutgoButtons.appendChild(buttonRemove);
+  outgoElement.appendChild(newOutgo);
+  outgoElement.appendChild(newOutgoButtons);
+  outgoesList.appendChild(outgoElement);
 
   buttonRemove.addEventListener("click", removeOutgo);
+  buttonEdit.addEventListener("click", createOutgoEditForm);
 };
 
 const addOutgo = (e) => {
@@ -267,6 +371,13 @@ function calculateTotalMoney() {
   const totalMoney = totalIncome - totalOutgo;
   console.log(totalMoney);
   sumOfMoney.innerHTML = `Stan Twojego konta wynosi ${totalMoney} PLN`;
+  if (totalMoney > 0) {
+    sumOfMoney.classList.add("green");
+    sumOfMoney.classList.remove("red");
+  } else {
+    sumOfMoney.classList.add("red");
+    sumOfMoney.classList.remove("green");
+  }
   return totalMoney;
 }
 
