@@ -7,13 +7,10 @@ const outgoValue = document.querySelector("#outgoes-value");
 const incomesSubmit = document.querySelector("#incomes-form");
 const outgoesSubmit = document.querySelector("#outgoes-form");
 
-const btnIncomeSubmit = document.querySelector("#form-in-submit");
-const btnOutgoSubmit = document.querySelector("#form-out-submit");
-
 const incomesSum = document.querySelector("#sum-of-incomes");
 const outgoesSum = document.querySelector("#sum-of-outgoes");
 
-let sumOfMoney = document.querySelector("#sum-of-all");
+const sumOfMoney = document.querySelector("#sum-of-all");
 
 const incomesList = document.querySelector("#income-list");
 const outgoesList = document.querySelector("#outgo-list");
@@ -32,10 +29,9 @@ const removeIncome = (e) => {
   incomeElementParten.remove();
 
   const removedId = incomeElementParten.id;
-  console.log(removedId);
   incomes = incomes.filter((item) => item.id != removedId);
 
-  let sumOfIncomes = calculateSum(incomes, "iValue");
+  sumOfIncomes = calculateSum(incomes, "iValue");
   incomesSum.innerHTML = `Suma przychodów: ${sumOfIncomes} PLN`;
 };
 
@@ -43,7 +39,6 @@ const changeInputValues = (editedID, editedName, editedValue, event) => {
   const divById = document.getElementById(editedID);
   const elementsToUpdate = divById.querySelectorAll(".budget-position span");
   let index = incomes.findIndex((item) => item.id == editedID);
-  console.log("index", index);
   if (index != -1) {
     if (editedName != "") {
       elementsToUpdate[0].innerHTML = `${editedName}: `;
@@ -53,9 +48,8 @@ const changeInputValues = (editedID, editedName, editedValue, event) => {
       elementsToUpdate[1].innerHTML = `${editedValue} PLN`;
       incomes[index].iValue = parseFloat(editedValue);
     }
-    let sumOfIncomes = calculateSum(incomes, "iValue");
+    sumOfIncomes = calculateSum(incomes, "iValue");
     incomesSum.innerHTML = `Suma przychodów: ${sumOfIncomes} złotych`;
-    console.log("Przychody", sumOfIncomes);
   } else {
     index = outgoes.findIndex((item) => item.id == editedID);
     if (editedName != "") {
@@ -66,9 +60,8 @@ const changeInputValues = (editedID, editedName, editedValue, event) => {
       elementsToUpdate[1].innerHTML = editedValue;
       outgoes[index].oValue = parseFloat(editedValue);
     }
-    let sumOfOutgoes = calculateSum(outgoes, "oValue");
+    sumOfOutgoes = calculateSum(outgoes, "oValue");
     outgoesSum.innerHTML = `Suma przychodów: ${sumOfOutgoes} PLN`;
-    console.log("Wydatki", sumOfOutgoes);
   }
   const toRemove = event.currentTarget;
   const toRemoveParent = toRemove.closest(".editing");
@@ -106,7 +99,7 @@ const createIncomeEditForm = (e) => {
   const editedValue = document.createElement("input");
   editedValue.setAttribute("id", "edited-value");
   editedValue.setAttribute("type", "number");
-  editedValue.setAttribute("ster", "0.01");
+  editedValue.setAttribute("step", "0.01");
   editedValue.setAttribute("placeholder", "Nowa kwota");
 
   const editedButton = document.createElement("button");
@@ -141,7 +134,7 @@ const createIncomeEditForm = (e) => {
       isEdited = false;
     });
   }
-  let sumOfIncomes = calculateSum(incomes, "iValue");
+  sumOfIncomes = calculateSum(incomes, "iValue");
   incomesSum.innerHTML = `Suma przychodów: ${sumOfIncomes} PLN`;
   isEdited = true;
 };
@@ -200,7 +193,7 @@ const createOutgoEditForm = (eve) => {
       isEdited = false;
     });
   }
-  let sumOfOutgoes = calculateSum(outgoes, "oValue");
+  sumOfOutgoes = calculateSum(outgoes, "oValue");
   outgoesSum.innerHTML = `Suma wydatków: ${sumOfOutgoes} PLN`;
   isEdited = true;
 };
@@ -230,6 +223,7 @@ const renderIncome = (income) => {
 
   const incomeTitle = document.createElement("span");
   incomeTitle.innerHTML = `${income.title}: `;
+  incomeTitle.classList.add("incomeTitleSpan");
 
   const incomeValue = document.createElement("span");
   incomeValue.innerHTML = `${income.iValue} złotych`;
@@ -267,9 +261,8 @@ const addIncome = (e) => {
     incomeValue.value = "";
 
     renderIncome(income);
-    let sumOfIncomes = calculateSum(incomes, "iValue");
+    sumOfIncomes = calculateSum(incomes, "iValue");
     incomesSum.innerHTML = `Suma przychodów: ${sumOfIncomes} PLN`;
-    console.log("Przychody", sumOfIncomes);
   }
 };
 
@@ -280,10 +273,9 @@ const removeOutgo = (e) => {
   outgoElementParten.remove();
 
   const removedId = outgoElementParten.id;
-  console.log(removedId);
   outgoes = outgoes.filter((item) => item.id != removedId);
 
-  let sumOfOutgoes = calculateSum(outgoes, "oValue");
+  sumOfOutgoes = calculateSum(outgoes, "oValue");
   outgoesSum.innerHTML = `Suma wydatków: ${sumOfOutgoes} PLN`;
 };
 
@@ -349,7 +341,7 @@ const addOutgo = (e) => {
     outgoValue.value = "";
 
     renderOutgo(outgo);
-    let sumOfOutgoes = calculateSum(outgoes, "oValue");
+    sumOfOutgoes = calculateSum(outgoes, "oValue");
     outgoesSum.innerHTML = `Suma wydatków: ${sumOfOutgoes} PLN`;
   }
 };
@@ -369,7 +361,6 @@ function calculateTotalMoney() {
     return accumulator + object.oValue;
   }, 0);
   const totalMoney = totalIncome - totalOutgo;
-  console.log(totalMoney);
   const absoluteTotalMoney = Math.abs(totalMoney);
   sumOfMoney.innerHTML = `Bilans wynosi zero`;
   if (totalMoney > 0) {

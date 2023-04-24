@@ -16,11 +16,11 @@
   <body>
     <section>
       <div class="logo"></div>
-      <div id="sum-of-all">Tutaj pojawi się stan Twoich finansów</div>
+      <div id="sum-of-all">Bilans wynosi zero</div>
       <div class="table">
         <div>
           <!--
-            Tabela przychodów
+            Incomes table
           -->
           <h2>Przychody</h2>
           <div id="incomes-container">
@@ -29,11 +29,14 @@
                 id="incomes-name"
                 type="text"
                 placeholder="Nazwa wpływów"
+                required
               />
               <input
                 id="incomes-value"
                 type="number"
                 step="0.01"
+                min="0.01"
+                required
                 placeholder="kwota"
               />
               <button id="form-in-submit" class="button" type="submit">
@@ -48,7 +51,7 @@
           </div>
         </div>
         <!--
-            Tabela wydatków
+            Outgoes table
           -->
         <div>
           <h2>Wydatki</h2>
@@ -58,12 +61,15 @@
                 id="outgoes-name"
                 type="text"
                 placeholder="Nazwa wydatku"
+                required
               />
               <input
                 id="outgoes-value"
                 type="number"
                 step="0.01"
+                min="0.01"
                 placeholder="kwota"
+                required
               />
               <button id="form-out-submit" class="button" type="submit">
                 Dodaj wydatki
