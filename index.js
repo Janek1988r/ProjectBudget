@@ -31,8 +31,11 @@ const removeIncome = (e) => {
   const removedId = incomeElementParten.id;
   incomes = incomes.filter((item) => item.id != removedId);
 
+  isEdited = false;
+
   sumOfIncomes = calculateSum(incomes, "iValue");
   incomesSum.innerHTML = `Suma przychodów: ${sumOfIncomes} PLN`;
+  calculateTotalMoney();
 };
 
 const changeInputValues = (editedID, editedName, editedValue, event) => {
@@ -66,6 +69,8 @@ const changeInputValues = (editedID, editedName, editedValue, event) => {
   const toRemove = event.currentTarget;
   const toRemoveParent = toRemove.closest(".editing");
   toRemoveParent.remove();
+
+  calculateTotalMoney();
 };
 
 const getEditedValues = (editedButton) => {
@@ -133,7 +138,7 @@ const createIncomeEditForm = (e) => {
       getEditedValues(editedButton);
       isEdited = false;
     });
-  }
+  } else alert("Dokończ wcześniej rozpoczętą edycję");
   sumOfIncomes = calculateSum(incomes, "iValue");
   incomesSum.innerHTML = `Suma przychodów: ${sumOfIncomes} PLN`;
   isEdited = true;
@@ -192,7 +197,7 @@ const createOutgoEditForm = (eve) => {
       getEditedValues(editedButton);
       isEdited = false;
     });
-  }
+  } else alert("Dokończ wcześniej rozpoczętą edycję");
   sumOfOutgoes = calculateSum(outgoes, "oValue");
   outgoesSum.innerHTML = `Suma wydatków: ${sumOfOutgoes} PLN`;
   isEdited = true;
@@ -263,6 +268,8 @@ const addIncome = (e) => {
     renderIncome(income);
     sumOfIncomes = calculateSum(incomes, "iValue");
     incomesSum.innerHTML = `Suma przychodów: ${sumOfIncomes} PLN`;
+
+    calculateTotalMoney();
   }
 };
 
@@ -275,8 +282,12 @@ const removeOutgo = (e) => {
   const removedId = outgoElementParten.id;
   outgoes = outgoes.filter((item) => item.id != removedId);
 
+  isEdited = false;
+
   sumOfOutgoes = calculateSum(outgoes, "oValue");
   outgoesSum.innerHTML = `Suma wydatków: ${sumOfOutgoes} PLN`;
+
+  calculateTotalMoney();
 };
 
 const renderOutgo = (outgo) => {
@@ -343,6 +354,8 @@ const addOutgo = (e) => {
     renderOutgo(outgo);
     sumOfOutgoes = calculateSum(outgoes, "oValue");
     outgoesSum.innerHTML = `Suma wydatków: ${sumOfOutgoes} PLN`;
+
+    calculateTotalMoney();
   }
 };
 
@@ -380,6 +393,3 @@ function calculateTotalMoney() {
 
 incomesSubmit.addEventListener("submit", addIncome);
 outgoesSubmit.addEventListener("submit", addOutgo);
-
-document.addEventListener("click", calculateTotalMoney);
-document.addEventListener("submit", calculateTotalMoney);
